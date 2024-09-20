@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 *{
-    font-family: Poppins;
+    font-family: "Jost", sans-serif;
 }
 @layer base {
     h1 {
