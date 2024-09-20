@@ -4,7 +4,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const { Server } = require("socket.io");
 const { createServer } = require("http");
-process.loadEnvFile(".env")
+// process.loadEnvFile(".env")
 const UserRoutes = require("./Routes/UserRoutes");
 const ChatRoutes = require("./Routes/ChatRoutes");
 const MessageRoutes = require("./Routes/MessageRoutes");
