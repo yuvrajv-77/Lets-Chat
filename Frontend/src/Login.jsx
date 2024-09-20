@@ -18,40 +18,53 @@ function Login() {
 	const [authError, setAuthError] = useState("");
 
     const [isloading, setIsloading] = useState(false);		// sets loading prop of Button
+    const [isChecked, setIsChecked] = useState(false);
 
 	const {authUser,setAuthUser} = useContext(AuthContext)
 
 
     const navigate = useNavigate();
+
+    // var formIsValid = true;
+    // var areFieldsFilled =  email && password;
+    const isFormValid = email && password && !emailError && !passwordError;
+
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+        const email = event.target.value;
+        if (!email) {
+          setEmailError("Email is required");
+        
+        } else if (!email.includes("@")) {
+          setEmailError("Email is not valid");
+        
+        } else {
+          setEmailError("");
+        }
+      };
+
+      const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+        const password = event.target.value;
+        if (!password) {
+          setPasswordError("Password is required");
+        
+        } else if (password.length < 8) {
+          setPasswordError("Password must be at least 8 characters");
+        
+        } else {
+          setPasswordError("");
+        }
+      };
+
+
+
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setIsloading(true);
-
-		// Check if all fields are filled
-		const areFieldsFilled = email && password;
-		let formIsValid = true;
-
-		// Validate the email
-		if (!email) {
-			setEmailError("Email is required");
-			formIsValid = false;
-		} else if (!email.includes("@")) {
-			setEmailError("Email is not valid");
-			formIsValid = false;
-		} else {
-			setEmailError("");
-		}
-
-		// Validate the password
-		if (!password) {
-			setPasswordError("Password is required");
-			formIsValid = false;
-		} else {
-			setPasswordError("");
-		}
-
-
-        if (areFieldsFilled && formIsValid) {
+        if (isFormValid) {
 			try {
 				await new Promise(resolve => setTimeout(resolve, 1000));
 				const response = await axios.post('http://localhost:6001/api/login', { email, password });
@@ -100,15 +113,15 @@ function Login() {
 
                 <section className=' h-full w-full flex items-center '>
                     <div className=' mx-auto  space-y-10  w-[25rem]'>
-                        <h1 className='text-[45px] font-semibold'>Sign In</h1>
-                        <form className=' flex gap-5 flex-col' onSubmit={handleSubmit}>
+                        <h1 className='text-[40px] font-semibold'>Sign In</h1>
+                        <form className=' flex gap-3 flex-col' onSubmit={handleSubmit}>
 
                             <div>
                                 <p className='mb-2'>Email</p>
                                 <Input placeholder='Enter Your Email'
                                     size='lg'
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => handleEmailChange(e)}
                                     className='text-sm'
                                     variant='bordered' />
                                  <p className="text-sm text-center h-3 text-red-500">{emailError}</p>
@@ -120,7 +133,7 @@ function Login() {
                                     placeholder='Enter Password'
                                     size='lg'
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) => handlePasswordChange(e)}
                                     variant='bordered'
                                     endContent={
                                         <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
@@ -135,7 +148,9 @@ function Login() {
                                     <p className="text-sm text-center h-3 text-red-500">{passwordError}</p>
                             </div>
 
-                            <Checkbox radius='full'>Remember me</Checkbox>
+                            <Checkbox radius='full'
+                             onChange={() => setIsChecked(!isChecked)}>
+                                Remember me</Checkbox>
 
                             <p className="text-sm text-center text-red-500">{authError}</p>
 
@@ -144,13 +159,15 @@ function Login() {
                                 <Button
                                     radius='full'
                                     size='lg'
+                                    color='primary'
                                     isLoading = {isloading}
+                                    isDisabled={!isFormValid}
                                     type='submit'
-                                    className=' text-white w-full shadow-xl bg-black'>Sign In</Button>
-                                <Button
+                                    className='  w-full shadow-xl '>Sign In</Button>
+                                {/* <Button
                                     radius='full'
                                     size='lg'
-                                    className=' text-black w-full shadow-xl bg-white'>Google</Button>
+                                    className=' text-black w-full shadow-xl bg-white'>Google</Button> */}
                             </div>
 
                         </form>

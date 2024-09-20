@@ -1,5 +1,5 @@
 import { Button, Checkbox, Divider, Image, Input } from '@nextui-org/react';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
@@ -23,61 +23,73 @@ function Register() {
 
 
     const [isloading, setIsloading] = useState(false);
-    const [isChecked, setIsChecked] = useState("isDisabled");
+    const [isChecked, setIsChecked] = useState(false);
     const navigate = useNavigate();
 
+    // var formIsValid = true;
+    var areFieldsFilled = name && email && password && username;
+    const isFormValid = areFieldsFilled && !nameError && !emailError && !passwordError && !usernameError && isChecked;
+
+    const handleNameChange = (event) => {
+        const name = event.target.value;
+        setName(name);
+        if (!name.trim()) {
+          setNameError("Name is required");
+         
+        } else if (name.trim().length < 3) {
+          setNameError("Name must be at least 3 characters");
+        
+        } else {
+          setNameError("");
+        }
+      };
+      
+      const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+        const email = event.target.value;
+        if (!email) {
+          setEmailError("Email is required");
+        
+        } else if (!email.includes("@")) {
+          setEmailError("Email is not valid");
+        
+        } else {
+          setEmailError("");
+        }
+      };
+      
+      const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+        const username = event.target.value;
+        if (!username) {
+          setUsernameError("Username is required");
+        
+        } else if (username.length < 4) {
+          setUsernameError("Username must be at least 4 characters");
+        
+        } else {
+          setUsernameError("");
+        }
+      };
+      
+      const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+        const password = event.target.value;
+        if (!password) {
+          setPasswordError("Password is required");
+        
+        } else if (password.length < 8) {
+          setPasswordError("Password must be at least 8 characters");
+        
+        } else {
+          setPasswordError("");
+        }
+      };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsloading(true);
-        const areFieldsFilled = name && email && password && username;
-       
-        let formIsValid = true;
-
-        if (!name.trim()) {
-            setNameError("Name is required");
-            formIsValid = false;
-        } else if (name.trim().length < 3) {
-            setNameError("Name must be at least 3 characters");
-            formIsValid = false;
-        } else {
-            setNameError("");
-        }
-
-        // Validate the email
-        if (!email) {
-            setEmailError("Email is required");
-            formIsValid = false;
-        } else if (!email.includes("@")) {
-            setEmailError("Email is not valid");
-            formIsValid = false;
-        } else {
-            setEmailError("");
-        }
-
-        if (!username) {
-            setUsernameError("Username is required");
-            formIsValid = false;
-        }
-        else if (username.length < 4) {
-            setUsernameError("Username must be at least 4 characters");
-            formIsValid = false;
-        }
-        else {
-            setUsernameError("");
-        }
-        // Validate the password
-        if (!password) {
-            setPasswordError("Password is required");
-            formIsValid = false;
-        } else if (password.length < 8) {
-            setPasswordError("Password must be at least 8 characters");
-            formIsValid = false;
-        } else {
-            setPasswordError("");
-        }
-
-        if (formIsValid && areFieldsFilled) {
+        if (isFormValid) {
             try {
                
                 // await new Promise(resolve => setTimeout(resolve, 1000));
@@ -108,24 +120,26 @@ function Register() {
 
         } else {
             setIsloading(false);
-            showErrorAlert(true);
+            setshowErrorAlert(true);
             console.log("Form validation failed");
         }
     }
+
+    
     return (
         <>
             <div className='w-full h-screen justify-between items-center flex relative'>
 
                 <section className=' h-full w-full flex items-center '>
                     <div className=' mx-auto  space-y-10  w-[25rem]'>
-                        <h1 className='text-[45px] font-semibold'>Sign Up</h1>
-                        <form onSubmit={handleSubmit} className=' flex gap-5 flex-col'>
+                        <h1 className='text-[40px] font-semibold'>Sign Up</h1>
+                        <form onSubmit={handleSubmit} className=' flex gap-3 flex-col'>
                             <div>
                                 <p className='mb-2'>Name</p>
                                 <Input placeholder='Enter Your Name'
                                     size='lg'
                                     value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    onChange={(e) => handleNameChange(e)}
                                     variant='bordered' />
                                      <p className="text-sm text-center h-2 text-red-500">{nameError}</p>
                             </div>
@@ -134,7 +148,7 @@ function Register() {
                                 <Input placeholder='Enter Your Email'
                                     size='lg'
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => handleEmailChange(e)}
                                     variant='bordered' />
                                      <p className="text-sm text-center h-2 text-red-500">{emailError}</p>
                             </div>
@@ -143,7 +157,7 @@ function Register() {
                                 <Input placeholder='Create a Username'
                                     size='lg'
                                     value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    onChange={(e) => handleUsernameChange(e)}
                                     variant='bordered' />
                                      <p className="text-sm text-center h-2 text-red-500">{usernameError}</p>
                             </div>
@@ -152,19 +166,14 @@ function Register() {
                                 <Input placeholder='Create Password'
                                     size='lg'
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) => handlePasswordChange(e)}
                                     variant='bordered' />
                                      <p className="text-sm text-center h-2 text-red-500">{passwordError}</p>
                             </div>
-                            {/* <div>
-                                <p className='mb-2'>Comfirm Password</p>
-                                <Input placeholder='Re-enter Password'
-                                    size='lg'
-                                    variant='bordered' />
-                            </div> */}
+                            
                             <Checkbox
                                 radius='full'
-                                onChange={() => setIsChecked("")}
+                                onChange={() => setIsChecked(!isChecked)}
                             >I agree to all Terms and Conditions.</Checkbox>
 
                             <div className='mt-6 space-y-6'>
@@ -173,12 +182,13 @@ function Register() {
                                     size='lg'
                                     type='submit'
                                     loading={isloading}
-
-                                    className=' text-white w-full shadow-xl bg-black'>Create Account</Button>
-                                <Button
+                                    isDisabled={!isFormValid}
+                                    color='primary'
+                                    className='  w-full shadow-xl'>Create Account</Button>
+                                {/* <Button
                                     radius='full'
                                     size='lg'
-                                    className=' text-black w-full shadow-xl bg-white'>Google</Button>
+                                    className=' text-black w-full shadow-xl bg-white'>Google</Button> */}
                             </div>
 
                         </form>
