@@ -1,4 +1,4 @@
-import { Avatar, Button, Input, ScrollShadow, Skeleton, User } from '@nextui-org/react'
+import { Avatar, Button, Chip, Input, ScrollShadow, Skeleton, User } from '@nextui-org/react'
 import React, { useContext, useEffect, useState } from 'react'
 import Search from '../assets/search'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, cn, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Link } from "@nextui-org/react";
@@ -17,8 +17,11 @@ function ChatList() {
   const { authUser, selectedChat, setSelectedChat } = useContext(AuthContext)
   const [chats, setChats] = useState([]);
   const [groups, setGroups] = useState([]);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen: isNewChatOpen, onOpen: onNewChatOpen, onOpenChange: onNewChatOpenChange } = useDisclosure();
+  const { isOpen: isNewGroupOpen, onOpen: onNewGroupOpen, onOpenChange: onNewGroupOpenChange } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState('');
+  const [groupName, setGroupName] = useState('');
+  const [groupUsers, setGroupUsers] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [isfetching, setIsfetching] = useState(false);
@@ -73,7 +76,7 @@ function ChatList() {
     }
   }, [authUser]);
 
- 
+
   const accessChat = async (userId) => {
     try {
       const config = {
@@ -85,7 +88,7 @@ function ChatList() {
       const { data } = await axios.post('http://localhost:6001/api/chat', { userId }, config);
       setSelectedChat(data);
       console.log("chat accessed ", data);
-      
+
       setSearchResult([])
       setSearchTerm('')
 
@@ -157,13 +160,14 @@ function ChatList() {
                 key="new"
                 shortcut="⌘N"
                 startContent={<AddUsers />}
-                onPress={onOpen}
+                onPress={onNewChatOpen}
               >
                 New Message
               </DropdownItem>
               <DropdownItem
                 key="copy"
                 shortcut="⌘C"
+                onPress={onNewGroupOpen}
                 startContent={<AddToGroup />}
               >
                 Create Group
@@ -195,7 +199,7 @@ function ChatList() {
               })
               }
               {chats.map((chat, index) => {
-              
+
                 const otherUser = chat.users[0]._id === authUser._id ? chat.users[1] : chat.users[0];
                 const chatname = chat.users[0]._id === authUser._id ? chat.users[1].name : chat.users[0].name;
                 const lastMessage = chat.latestMessage?.message
@@ -209,11 +213,10 @@ function ChatList() {
         </div>
       </ScrollShadow>
 
-
-
+      {/* new chat modal */}
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={isNewChatOpen}
+        onOpenChange={onNewChatOpenChange}
         placement="top-center"
         backdrop='blur'
       >
@@ -271,6 +274,102 @@ function ChatList() {
           )}
         </ModalContent>
       </Modal>
+
+      {/* Create new group  */}
+      <Modal
+        isOpen={isNewGroupOpen}
+        onOpenChange={onNewGroupOpenChange}
+        placement="top-center"
+        backdrop='blur'
+        size='lg'
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Create New Group</ModalHeader>
+              <ModalBody className='space-y-3'>
+                <Input
+                  autoFocus
+                  value={groupName}
+                  label="Enter Group Name"
+                  onChange={(e) => setGroupName(e.target.value)}
+                  variant="bordered"
+                  size='lg'
+                />
+                <div className='flex flex-wrap gap-3'>
+                  <Chip
+                    variant="flat"
+                    size='lg'
+                    color='success'
+                    className='py-5'
+                    avatar={
+                      <Avatar
+                        name="JW"
+                        src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
+                      />
+                    }
+                  >
+                    You
+                  </Chip>
+                  <Chip
+                    variant="flat"
+                    size='lg'
+                    color='primary'
+                    className='py-5'
+                    onClose={() => console.log("close")}
+                    avatar={
+                      <Avatar
+                        name="JW"
+                        src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
+                      />
+                    }
+                  >
+                    Avatar
+                  </Chip>
+
+                </div>
+
+                <div className=''>
+                  <h6>Add Chats</h6>
+                  <div className='max-h-[300px] overflow-auto'>
+
+                    {
+                      chats.map((chat, index) => {
+                        const otherUser = chat.users[0]._id === authUser._id ? chat.users[1] : chat.users[0];
+                        return (
+                          <div key={index} className={`flex mt-2 pr-2 justify-between items-center  cursor-pointer hover:bg-slate-100  rounded-lg`} >
+                            <div className='flex p-2 gap-x-4 items-center'>
+                              <div>
+                                <Avatar size='md' className="" src='https://i.pravatar.cc/150?u=a04258114e29026302d' />
+                              </div>
+                              <div className='flex flex-col justify-center'>
+                                <p className='font-'>{otherUser.name}</p>
+                                <p className='font-light text-xs text-blue-500'>{otherUser.username}</p>
+                              </div>
+                            </div>
+                            <Add />
+                          </div>
+                        )
+                      })}
+                  </div>
+
+
+                </div>
+
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="flat" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onClick={handleUserSearch} >
+                  Create Group
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
     </div>
   )
 }

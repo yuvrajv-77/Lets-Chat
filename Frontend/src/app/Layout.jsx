@@ -28,15 +28,13 @@ function Layout() {
 						<div className='flex text-sm items-center px-16 border-r-2 text-blue-700  bg-blue-200 border-blue-500 hover:bg-gray-200'>
 							<Chat />Chats
 						</div>
-						<div className='flex text-sm items-center px-16 font-medium hover:bg-gray-200'>
+						{/* <div className='flex text-sm items-center px-16 font-medium hover:bg-gray-200'>
 							<Phone /> Calls
 						</div>
 						<div className='flex text-sm items-center px-16 font-medium hover:bg-gray-200'>
 							<Notes /> Notes
-						</div>
-						<div className='flex cursor-pointer text-sm items-center px-16 font-medium hover:bg-gray-200'>
-							<Setting /> Settings
-						</div>
+						</div> */}
+						
 						<div onClick={() => {
 							localStorage.removeItem('userLocalData');
 							setAuthUser(null);
