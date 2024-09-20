@@ -4,16 +4,16 @@ import { Avatar, Badge } from '@nextui-org/react'
 import { SocketContext } from '../context/SocketContext'
 import { AuthContext } from '../context/AuthContext'
 
-function ChatCard({ data, lastMsg, id, onClick, groupChat }) {
+function ChatCard({ data, lastMsg, chatId, avatar, onClick, otherId }) {
     const { onlineUsers } = useContext(SocketContext)
     const { authUser, selectedChat } = useContext(AuthContext)
-    const isOnline = onlineUsers.map(user => user.id).includes(data?._id)
+    const isOnline = onlineUsers.map(user => user.id).includes(otherId)
 
     const [isSelected, setIsSelected] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {       //to check if selected chat is same as current chat and change the bg color
         setIsSelected(false);
-        if (selectedChat?._id == id) {
+        if (selectedChat?._id == chatId) {
             setIsSelected(true);
         }else{
             setIsSelected(false);
@@ -41,9 +41,9 @@ function ChatCard({ data, lastMsg, id, onClick, groupChat }) {
             <div>
                 {isOnline ?
                     <Badge content="" color="success" shape="circle" placement="bottom-right">
-                        <Avatar className="h-[60px] w-[60px]" src='https://i.pravatar.cc/150?u=a04258114e29026302d' />
+                        <Avatar className="h-[60px] w-[60px]" src={avatar} />
                     </Badge> :
-                    <Avatar className="h-[60px] w-[60px]" src='https://i.pravatar.cc/150?u=a04258114e29026302d' />
+                    <Avatar className="h-[60px] w-[60px]" src={avatar} />
                 }
             </div>
             <div className='w-full flex '>

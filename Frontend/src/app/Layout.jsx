@@ -49,13 +49,14 @@ function Layout() {
 				<div className='space-y-5 flex flex-col  items-center'>
 					<User
 						name={authUser?.name}
+						
 						description={(
-							<Link href="https://twitter.com/jrgarciadev" size="sm" isExternal>
+							<Link  size="sm">
 								{authUser?.username}
 							</Link>
 						)}
 						avatarProps={{
-							src: "https://avatars.githubusercontent.com/u/30373425?v=4"
+							src: authUser?.avatar,
 						}}
 					/>
 

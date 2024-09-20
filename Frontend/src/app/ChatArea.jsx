@@ -9,10 +9,8 @@ import MessageSelf from '../components/MessageSelf';
 import MessageOther from '../components/MessageOther';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import io from "socket.io-client";
 import { SocketContext } from '../context/SocketContext';
 import Emoji from '../assets/Emoji';
-// import Picker from "emoji-picker-react";
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
@@ -28,6 +26,7 @@ function ChatArea() {
   
 
     const chatname = selectedChat.isGroupChat? selectedChat.chatName : otherUser.name;
+    const chatavatar = selectedChat.isGroupChat? 'https://i.pravatar.cc/150?u=a04258114e29026302d' : otherUser.avatar;
 
 
     const [messages, setMessages] = useState([]);
@@ -69,7 +68,7 @@ function ChatArea() {
     }
 
 
- console.log("selected chat ", selectedChat);
+    console.log("selected chat ", selectedChat);
  
     const typingHandler = (e) => {
         setNewMessage(e.target.value)
@@ -126,12 +125,12 @@ function ChatArea() {
             {/* <div className='grid grid-rows-7'> */}
             <div className='flex p-6 h- border justify-between  items-center'>
 
-                <div className='flex gap-3  items-center'>
+                <div className='flex gap-3 items-center'>
                     {isOnline ?
                         <Badge content="" color="success" shape="circle" placement="bottom-right">
-                            <Avatar className="h-[60px] w-[60px]" src='https://i.pravatar.cc/150?u=a04258114e29026302d' />
+                            <Avatar className="h-[60px] w-[60px]" src={chatavatar} />
                         </Badge> :
-                        <Avatar className="h-[60px] w-[60px]" src='https://i.pravatar.cc/150?u=a04258114e29026302d' />
+                        <Avatar className="h-[60px] w-[60px]" src={chatavatar} />
                     }
 
                     <div className="">
@@ -153,8 +152,6 @@ function ChatArea() {
                             const sender = message?.senderId._id;
                             const self_id = authUser?._id;
 
-                            // console.log("authUser" ,authUser);
-                            // console.log("sender Id ", sender);
                             if (sender === self_id) {
                                 return <MessageSelf key={index} message={message}/>
                             } else {
@@ -178,6 +175,7 @@ function ChatArea() {
                         }
                         placeholder='Enter Your Message'
                         size='lg'
+                        autoFocus
                         variant=''
                         value={newMessage}
                         onKeyDown={sendMessage}

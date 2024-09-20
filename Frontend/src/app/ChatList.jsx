@@ -1,4 +1,4 @@
-import { Avatar, Button, Chip, Input, ScrollShadow, Skeleton, User } from '@nextui-org/react'
+import { Avatar, Button, Chip, Divider, Input, ScrollShadow, Skeleton, User } from '@nextui-org/react'
 import React, { useContext, useEffect, useState } from 'react'
 import Search from '../assets/search'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, cn, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Link } from "@nextui-org/react";
@@ -11,10 +11,11 @@ import AddToGroup from '../assets/AddToGroup';
 import { motion } from "framer-motion"
 import ChatSkeleton from '../components/ChatSkeleton';
 import { useNavigate } from 'react-router-dom';
+import CreateGroupModal from '../components/CreateGroupModal';
 
 
 function ChatList() {
-  const { authUser, selectedChat, setSelectedChat } = useContext(AuthContext)
+  const { authUser, selectedChat, setSelectedChat, fetch, setFetch } = useContext(AuthContext)
   const [chats, setChats] = useState([]);
   const [groups, setGroups] = useState([]);
   const { isOpen: isNewChatOpen, onOpen: onNewChatOpen, onOpenChange: onNewChatOpenChange } = useDisclosure();
@@ -74,7 +75,7 @@ function ChatList() {
       fetchChats();
       fetchGroupChat();
     }
-  }, [authUser]);
+  }, [authUser,fetch]);
 
 
   const accessChat = async (userId) => {
@@ -88,7 +89,7 @@ function ChatList() {
       const { data } = await axios.post('http://localhost:6001/api/chat', { userId }, config);
       setSelectedChat(data);
       console.log("chat accessed ", data);
-
+      setFetch((prev) => prev + 1);
       setSearchResult([])
       setSearchTerm('')
 
@@ -130,7 +131,7 @@ function ChatList() {
       console.log("selected chat: ", selectedChat);
       setSearchResult([])
       setSearchTerm('')
-
+      
     }
     catch (error) {
       console.log("error in accessing group", error)
@@ -145,7 +146,7 @@ function ChatList() {
       <div className='flex items-center justify-between mb-5 p-3'>
         <h1 className='font-semibold'>Messages</h1>
         <div className=' rounded-full cursor-pointer'>
-          <Dropdown>
+          <Dropdown backdrop='opaque'>
             <DropdownTrigger>
               <Button
                 isIconOnly
@@ -158,7 +159,7 @@ function ChatList() {
             <DropdownMenu variant="faded" aria-label="Dropdown menu with icons">
               <DropdownItem
                 key="new"
-                shortcut="⌘N"
+                // shortcut="⌘N"
                 startContent={<AddUsers />}
                 onPress={onNewChatOpen}
               >
@@ -166,7 +167,7 @@ function ChatList() {
               </DropdownItem>
               <DropdownItem
                 key="copy"
-                shortcut="⌘C"
+                // shortcut="⌘C"
                 onPress={onNewGroupOpen}
                 startContent={<AddToGroup />}
               >
@@ -187,25 +188,36 @@ function ChatList() {
       <ScrollShadow className='overflow-auto overflow-x-hidden h-[80vh]  '>
         <div >
           {isfetching ? <div className='space-y-4'>
+  
             <ChatSkeleton />
             <ChatSkeleton />
             <ChatSkeleton />
-            <ChatSkeleton />
+            <ChatSkeleton /> 
 
           </div>
             : <>
+              {/* show group chats first */}
+              <p className='px-4  font-semibold'>Groups</p>
               {groups.map((group, index) => {
-                return <ChatCard data={group.chatName} key={index} lastMsg={group.latestMessage?.message} onClick={() => accessGroupChat(group._id)} />
-              })
-              }
+                return <ChatCard 
+                data={group.chatName} 
+                key={index} 
+                lastMsg={group.latestMessage?.message} 
+                onClick={() => accessGroupChat(group._id)} />
+              })}
+               <Divider className='my-2'/>
+              <p className='px-4  font-semibold mt-3'>Chats</p>
+              {/* show single chats */}
               {chats.map((chat, index) => {
-
-                const otherUser = chat.users[0]._id === authUser._id ? chat.users[1] : chat.users[0];
-                const chatname = chat.users[0]._id === authUser._id ? chat.users[1].name : chat.users[0].name;
-                const lastMessage = chat.latestMessage?.message
-                return <ChatCard data={chatname} key={index} id={chat._id} lastMsg={lastMessage} onClick={() => {
-                  accessChat(otherUser);
-                }} />
+                const otherUser = chat.users[0]._id === authUser._id ? chat.users[1] : chat.users[0]; // differentiate between loggedin user and other user
+                return <ChatCard
+                  data={otherUser.name}
+                  key={index}
+                  otherId={otherUser._id} 
+                  avatar={otherUser.avatar}
+                  chatId={chat._id}
+                  lastMsg={chat.latestMessage?.message}
+                  onClick={() => { accessChat(otherUser); }} />
               })}
 
             </>
@@ -228,7 +240,7 @@ function ChatList() {
                 <Input
                   autoFocus
                   value={searchTerm}
-                  label="Username"
+                  label="Enter the Username"
                   onChange={(e) => setSearchTerm(e.target.value)}
                   variant="bordered"
                 />
@@ -275,100 +287,9 @@ function ChatList() {
         </ModalContent>
       </Modal>
 
-      {/* Create new group  */}
-      <Modal
-        isOpen={isNewGroupOpen}
-        onOpenChange={onNewGroupOpenChange}
-        placement="top-center"
-        backdrop='blur'
-        size='lg'
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Create New Group</ModalHeader>
-              <ModalBody className='space-y-3'>
-                <Input
-                  autoFocus
-                  value={groupName}
-                  label="Enter Group Name"
-                  onChange={(e) => setGroupName(e.target.value)}
-                  variant="bordered"
-                  size='lg'
-                />
-                <div className='flex flex-wrap gap-3'>
-                  <Chip
-                    variant="flat"
-                    size='lg'
-                    color='success'
-                    className='py-5'
-                    avatar={
-                      <Avatar
-                        name="JW"
-                        src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
-                      />
-                    }
-                  >
-                    You
-                  </Chip>
-                  <Chip
-                    variant="flat"
-                    size='lg'
-                    color='primary'
-                    className='py-5'
-                    onClose={() => console.log("close")}
-                    avatar={
-                      <Avatar
-                        name="JW"
-                        src="https://i.pravatar.cc/300?u=a042581f4e29026709d"
-                      />
-                    }
-                  >
-                    Avatar
-                  </Chip>
-
-                </div>
-
-                <div className=''>
-                  <h6>Add Chats</h6>
-                  <div className='max-h-[300px] overflow-auto'>
-
-                    {
-                      chats.map((chat, index) => {
-                        const otherUser = chat.users[0]._id === authUser._id ? chat.users[1] : chat.users[0];
-                        return (
-                          <div key={index} className={`flex mt-2 pr-2 justify-between items-center  cursor-pointer hover:bg-slate-100  rounded-lg`} >
-                            <div className='flex p-2 gap-x-4 items-center'>
-                              <div>
-                                <Avatar size='md' className="" src='https://i.pravatar.cc/150?u=a04258114e29026302d' />
-                              </div>
-                              <div className='flex flex-col justify-center'>
-                                <p className='font-'>{otherUser.name}</p>
-                                <p className='font-light text-xs text-blue-500'>{otherUser.username}</p>
-                              </div>
-                            </div>
-                            <Add />
-                          </div>
-                        )
-                      })}
-                  </div>
-
-
-                </div>
-
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onClick={handleUserSearch} >
-                  Create Group
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      {/* Create new group modal */}
+     
+      <CreateGroupModal isNewGroupOpen={isNewGroupOpen} onNewGroupOpenChange={onNewGroupOpenChange} chats={chats} setChats={setChats}/>
 
     </div>
   )

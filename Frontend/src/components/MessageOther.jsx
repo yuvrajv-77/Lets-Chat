@@ -1,16 +1,25 @@
 import { Avatar } from '@nextui-org/react'
 import React from 'react'
 
-
-
 function MessageOther({ message }) {
+    console.log("message: ", message);
+
+    var senderName = '';
+    if(message.chatId.isGroupChat){
+        senderName = message.senderId.name;
+    }
+ 
+    
+    
     return (
         <div className='max-w-[500px] self-start gap-3 flex'>
 
-            <Avatar className='min-w-[40px]' src={'https://images.pexels.com/photos/8090137/pexels-photo-8090137.jpeg?auto=compress&cs=tinysrgb&w=600'} alt="avatar" size="md" />
+            <Avatar className='min-w-[40px]' src={message.senderId.avatar} alt="avatar" size="md" />
 
-            <div className=' text-sm rounded-r-3xl rounded-b-2xl bg-white px-4 py-3'>
-                {message.message}
+            <div className='  rounded-r-3xl rounded-b-2xl bg-white px-4 py-3'>
+                <p className=' text-xs text-purple-600'>{senderName}</p>
+                <p className='text-md'>{message.message}</p>
+                
             </div>
         </div>
     )

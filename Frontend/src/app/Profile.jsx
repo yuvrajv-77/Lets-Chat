@@ -22,9 +22,10 @@ function Profile() {
         >
           <Image
             alt="Woman listing to music"
-            className="object-cover "
+            className="object-cover"
             height={300}
-            src="https://nextui.org/images/hero-card.jpeg"
+            isBlurred
+            src={otherUser?.avatar}
             width={300}
           />
           <CardFooter className='flex  justify-center text-center flex-col z-10'>
