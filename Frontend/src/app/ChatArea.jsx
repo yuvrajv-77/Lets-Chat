@@ -138,10 +138,17 @@ function ChatArea() {
                         <p className='text-xs '>{isOnline ? "Online" : ""}</p>
                     </div>
                 </div>
-                <div className='flex gap-3' >
+                <div className='flex gap-3 items-center' >
+                  <Button isIconOnly variant='light' radius='full' >
                     <Video />
-                    <Phone />
+                  </Button>
+                  <Button isIconOnly variant='light' radius='full' >
+                    <Phone  />
+                  </Button>
+                  <Button isIconOnly variant='light' radius='full' >
                     <Option />
+                  </Button>
+                   
                 </div>
             </div>
 

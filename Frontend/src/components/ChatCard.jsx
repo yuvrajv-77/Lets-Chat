@@ -41,9 +41,9 @@ function ChatCard({ data, lastMsg, chatId, avatar, onClick, otherId }) {
             <div>
                 {isOnline ?
                     <Badge content="" color="success" shape="circle" placement="bottom-right">
-                        <Avatar className="h-[60px] w-[60px]" src={avatar} />
+                        <Avatar size='lg' src={avatar} />
                     </Badge> :
-                    <Avatar className="h-[60px] w-[60px]" src={avatar} />
+                    <Avatar className="" size='lg' src={avatar} />
                 }
             </div>
             <div className='w-full flex '>

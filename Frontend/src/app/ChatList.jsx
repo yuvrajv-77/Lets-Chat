@@ -75,7 +75,7 @@ function ChatList() {
       fetchChats();
       fetchGroupChat();
     }
-  }, [authUser,fetch]);
+  }, [authUser]);
 
 
   const accessChat = async (userId) => {
@@ -187,7 +187,7 @@ function ChatList() {
       </div>
       <ScrollShadow className='overflow-auto overflow-x-hidden h-[80vh]  '>
         <div >
-          {isfetching ? <div className='space-y-4'>
+          {isfetching ? <div className='space-y-6'>
   
             <ChatSkeleton />
             <ChatSkeleton />

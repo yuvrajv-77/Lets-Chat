@@ -77,7 +77,7 @@ function Login() {
 				localStorage.removeItem("userLocalData", JSON.stringify(response.data));
 				localStorage.setItem("userLocalData", JSON.stringify(response.data));
                 setAuthUser(response.data);
-                setTimeout(() => navigate('/app'), 1000);
+                setTimeout(() => navigate('/app'), 100);
 
 				if (response.status === 200) {
 					// setshowSuccessAlert(true);
@@ -120,6 +120,7 @@ function Login() {
                                 <p className='mb-2'>Email</p>
                                 <Input placeholder='Enter Your Email'
                                     size='lg'
+                                    autoFocus
                                     value={email}
                                     onChange={(e) => handleEmailChange(e)}
                                     className='text-sm'

@@ -12,6 +12,8 @@ import Setting from '../assets/Setting';
 import Notes from '../assets/Notes';
 import { AuthContext } from '../context/AuthContext';
 import { Outlet, useNavigate } from 'react-router-dom';
+import Leave from '../assets/Leave';
+import Sidebar from './Sidebar';
 
 function Layout() {
 	const navigate = useNavigate()
@@ -20,52 +22,9 @@ function Layout() {
 	
 	return (
 		<div className='flex'>
-			<div className='flex flex-col border-r justify-between items-center h-screen py-5 '>
-				<div className='space-y-20'>
-					<h2 className='text-center'>LetsChat!</h2>
-
-					<div className='space-y-5 '>
-						<div className='flex text-sm items-center px-16 border-r-2 text-blue-700  bg-blue-200 border-blue-500 hover:bg-gray-200'>
-							<Chat />Chats
-						</div>
-						{/* <div className='flex text-sm items-center px-16 font-medium hover:bg-gray-200'>
-							<Phone /> Calls
-						</div>
-						<div className='flex text-sm items-center px-16 font-medium hover:bg-gray-200'>
-							<Notes /> Notes
-						</div> */}
-						
-						<div onClick={() => {
-							localStorage.removeItem('userLocalData');
-							setAuthUser(null);
-							navigate('/login');
-						}} className='flex cursor-pointer text-sm items-center px-16 font-medium hover:bg-gray-200'>
-							<Setting /> Logout
-						</div>
-
-					</div>
-				</div>
-
-				<div className='space-y-5 flex flex-col  items-center'>
-					<User
-						name={authUser?.name}
-						
-						description={(
-							<Link  size="sm">
-								{authUser?.username}
-							</Link>
-						)}
-						avatarProps={{
-							src: authUser?.avatar,
-						}}
-					/>
-
-				</div>
-			</div>
-
+			<Sidebar/>
 			<div className='grid  grid-cols-4  w-full h-screen '>
-				<ChatList />
-				
+				<ChatList />		
 				{
 					selectedChat ? (
 						<>
