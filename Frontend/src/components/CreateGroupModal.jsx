@@ -79,6 +79,9 @@ const CreateGroupModal = ({ isNewGroupOpen, onNewGroupOpenChange, chats }) => {
                                 </Chip>
                                 {selectedUsers.map((user) => (
 
+
+
+
                                     <Chip
                                         variant="flat"
                                         size='lg'

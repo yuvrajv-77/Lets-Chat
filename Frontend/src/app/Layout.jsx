@@ -14,25 +14,26 @@ import { AuthContext } from '../context/AuthContext';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Leave from '../assets/Leave';
 import Sidebar from './Sidebar';
+import BottomNavbar from './BottomNavbar';
 
 function Layout() {
 	const navigate = useNavigate()
 
-	const { authUser, setAuthUser, selectedChat } = useContext(AuthContext)
+	const { selectedChat } = useContext(AuthContext)
 	
 	return (
-		<div className='flex'>
+		<div className='flex h-screen relative'>
 			<Sidebar/>
-			<div className='grid  grid-cols-4  w-full h-screen '>
-				<ChatList />		
-				{
-					selectedChat ? (
+			<BottomNavbar className={`md:hidden bg-white fixed z-20 py-2 bottom-0 border-t w-full ${selectedChat ? 'hidden' : 'block'} `}/>
+			<div className='lg:grid  grid-cols-4  w-full h-full  '>
+				<ChatList  className={`col-start-1 md:flex flex-col h-screen py-5 px-2 border-r  ${!selectedChat ? 'block' : 'hidden'} `}/>		
+				{selectedChat ? (
 						<>
 							<ChatArea />
-							<Profile />
+							<Profile className='hidden lg:block col-end-5 border p-8' />
 						</>
 					) : (
-						<div className='flex col-span-2 w-full items-center justify-center'>
+						<div className='hidden md:flex col-span-2 w-full items-center justify-center'>
 							<Card className="max-w-[400px]">
 								<CardHeader className="flex gap-3">
 									<Image

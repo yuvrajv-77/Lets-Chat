@@ -9,7 +9,7 @@ import Leave from '../assets/Leave';
 import React, { useContext, useState } from 'react'
 import { User } from '@nextui-org/react';
 
-const Sidebar = () => {
+const Sidebar = (props) => {
 
     const navigate = useNavigate()
 
@@ -20,9 +20,9 @@ const Sidebar = () => {
         setActiveButton(buttonName);
     };
     return (
-        <div className='flex flex-col border-r justify-between items-center h-screen py-10 px-10 '>
+        <div className='hidden md:flex flex-col border-r justify-between items-center h-screen  py-10 md:px-10 '>
             <div className='space-y-20'>
-                <h2 className='text-center'>LC</h2>
+                <h1 className='text-center'>🐯</h1>
 
                 <div className='space-y-5 '>
                     <Tooltip showArrow={true} placement='right' content="Chats">
@@ -36,7 +36,7 @@ const Sidebar = () => {
                             <Chat white={activeButton === 'chat'} />
                         </Button>
                     </Tooltip>
-                    <Tooltip showArrow={true} placement='right' content="Calls">
+                    {/* <Tooltip showArrow={true} placement='right' content="Calls">
                         <Button
                             isIconOnly 
                             size='lg'
@@ -56,7 +56,7 @@ const Sidebar = () => {
                             onClick={() => handleButtonClick('notes')}
                         >
                             <Notes white={activeButton === 'notes'} />
-                        </Button></Tooltip>
+                        </Button></Tooltip> */}
 
                     <Button isIconOnly size='lg' variant='light'  onClick={() => {
                         localStorage.removeItem('userLocalData');
@@ -72,7 +72,7 @@ const Sidebar = () => {
             <div className=''>
                 <Dropdown placement='right'>
                     <DropdownTrigger>
-                        <Avatar src={authUser?.avatar} alt="avatar" size="lg" isBordered color='danger' />
+                        <Avatar src={authUser?.avatar} alt="avatar" size="md" isBordered color='danger' />
                     </DropdownTrigger>
                     <DropdownMenu>
                         <DropdownItem >

@@ -14,9 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import CreateGroupModal from '../components/CreateGroupModal';
 
 
-function ChatList() {
-  const { authUser, selectedChat, setSelectedChat, fetch, setFetch } = useContext(AuthContext)
-  const [chats, setChats] = useState([]);
+function ChatList(props) {
+  const { authUser, selectedChat, setSelectedChat, fetch, setFetch, chats, setChats } = useContext(AuthContext)
+  // const [chats, setChats] = useState([]);
   const [groups, setGroups] = useState([]);
   const { isOpen: isNewChatOpen, onOpen: onNewChatOpen, onOpenChange: onNewChatOpenChange } = useDisclosure();
   const { isOpen: isNewGroupOpen, onOpen: onNewGroupOpen, onOpenChange: onNewGroupOpenChange } = useDisclosure();
@@ -141,7 +141,7 @@ function ChatList() {
 
 
   return (
-    <div className='col-start-1 py-5 px-2 h-full '>
+    <div {...props}>
 
       <div className='flex items-center justify-between mb-5 p-3'>
         <h1 className='font-semibold'>Messages</h1>
@@ -185,7 +185,7 @@ function ChatList() {
           placeholder='Search' />
 
       </div>
-      <ScrollShadow className='overflow-auto overflow-x-hidden h-[80vh]  '>
+      <ScrollShadow className='flex-grow overflow-y-auto overflow-x-hidden h-full mb-40 md:mb-10 '>
         <div >
           {isfetching ? <div className='space-y-6'>
   
@@ -260,7 +260,7 @@ function ChatList() {
                               )}
                               avatarProps={{
                                 size: 'md',
-                                src: "https://avatars.githubusercontent.com/u/30373425?v=4"
+                                src: user.avatar
                               }}
                             />
                           </motion.div>

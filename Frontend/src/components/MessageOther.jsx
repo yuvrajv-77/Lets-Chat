@@ -18,7 +18,7 @@ function MessageOther({ message }) {
 
             <div className='  rounded-r-3xl rounded-b-2xl bg-white px-4 py-3'>
                 <p className=' text-xs text-purple-600'>{senderName}</p>
-                <p className='text-md'>{message.message}</p>
+                <p className='text-sm'>{message.message}</p>
                 
             </div>
         </div>

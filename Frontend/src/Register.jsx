@@ -30,6 +30,9 @@ function Register() {
     var areFieldsFilled = name && email && password && username;
     const isFormValid = areFieldsFilled && !nameError && !emailError && !passwordError && !usernameError && isChecked;
 
+    if(authUser){
+        navigate('/app')
+    }
     const handleNameChange = (event) => {
         const name = event.target.value;
         setName(name);

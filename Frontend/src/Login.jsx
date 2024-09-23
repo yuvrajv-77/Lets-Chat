@@ -29,6 +29,9 @@ function Login() {
     // var areFieldsFilled =  email && password;
     const isFormValid = email && password && !emailError && !passwordError;
 
+    if(authUser){
+      navigate('/app')
+  }
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
