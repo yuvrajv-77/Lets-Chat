@@ -1,4 +1,4 @@
-const TheUser = require("../models/UserModel");
+const TheUser = require("../Models/UserModel");
 const generateToken = require("../Config/generatetToken");
 const ExAsyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
