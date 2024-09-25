@@ -11,7 +11,7 @@ function SocketContextProvider({ children }) {
 
     useEffect(() => {
         if (authUser) {
-            const socket = io("http://localhost:6001", {
+            const socket = io("https://lets-chat-mern.onrender.com", {
                 query: {
                     userId: authUser._id,
                     username: authUser.name

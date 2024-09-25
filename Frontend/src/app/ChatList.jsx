@@ -39,7 +39,7 @@ function ChatList(props) {
         }
       }
 
-      const { data } = await axios.get(`http://localhost:6001/api/searchUsers?search=${searchTerm}`, config);
+      const { data } = await axios.get(`https://lets-chat-mern.onrender.com/api/searchUsers?search=${searchTerm}`, config);
       setSearchResult(data);
       console.log('search result: ', data);
 
@@ -59,7 +59,7 @@ function ChatList(props) {
         }
       }
 
-      const { data } = await axios.get(`http://localhost:6001/api/chat`, config);
+      const { data } = await axios.get(`https://lets-chat-mern.onrender.com/api/chat`, config);
       setChats(data);
 
     }
@@ -86,7 +86,7 @@ function ChatList(props) {
         }
       }
       setSelectedChat();
-      const { data } = await axios.post('http://localhost:6001/api/chat', { userId }, config);
+      const { data } = await axios.post('https://lets-chat-mern.onrender.com/api/chat', { userId }, config);
       setSelectedChat(data);
       console.log("chat accessed ", data);
       setFetch((prev) => prev + 1);
@@ -108,7 +108,7 @@ function ChatList(props) {
         }
       }
 
-      const { data } = await axios.get(`http://localhost:6001/api/chat/groups`, config);
+      const { data } = await axios.get(`https://lets-chat-mern.onrender.com/api/chat/groups`, config);
       console.log("groups fetched ", data);
       setGroups(data);
 
@@ -125,7 +125,7 @@ function ChatList(props) {
         }
       }
 
-      const { data } = await axios.post('http://localhost:6001/api/chat/accessgroup', { chatId }, config);
+      const { data } = await axios.post('https://lets-chat-mern.onrender.com/api/chat/accessgroup', { chatId }, config);
       setSelectedChat(data);
       console.log("group accessed ", data);
       console.log("selected chat: ", selectedChat);

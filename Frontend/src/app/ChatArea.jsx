@@ -1,10 +1,8 @@
 import { Avatar, AvatarGroup, Badge, Button, Input } from '@nextui-org/react'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import Video from '../assets/video';
-import Phone from '../assets/Phone';
-import Option from '../assets/Option';
+
 import Attach from '../assets/Attach';
-import Send from '../assets/Send';
+
 import MessageSelf from '../components/MessageSelf';
 import MessageOther from '../components/MessageOther';
 import { AuthContext } from '../context/AuthContext';
@@ -50,7 +48,7 @@ function ChatArea(props) {
                     }
                 }
                 setNewMessage("");
-                const { data } = await axios.post(`http://localhost:6001/api/messages`, {
+                const { data } = await axios.post(`https://lets-chat-mern.onrender.com/api/messages`, {
                     message: newMessage,
                     chatId: selectedChat?._id,
                 }, config);
@@ -85,7 +83,7 @@ function ChatArea(props) {
                 }
             }
             // setLoading(true);
-            const { data } = await axios.get(`http://localhost:6001/api/messages/${selectedChat._id}`, config);
+            const { data } = await axios.get(`https://lets-chat-mern.onrender.com/api/messages/${selectedChat._id}`, config);
             setMessages(data);
             console.log("fetched messages ", data);
             // setLoading(false);

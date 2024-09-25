@@ -20,7 +20,7 @@ const CreateGroupModal = ({ isNewGroupOpen, onNewGroupOpenChange, chats }) => {
                     Authorization: `Bearer ${authUser?.token}`
                 }
             }
-            const data  = await axios.post('http://localhost:6001/api/chat/newgroup', { name: groupName, users: JSON.stringify(selectedUsers.map((user) => user._id)) }, config);
+            const data  = await axios.post('https://lets-chat-mern.onrender.com/api/chat/newgroup', { name: groupName, users: JSON.stringify(selectedUsers.map((user) => user._id)) }, config);
             console.log("group created ", data);
             if(data.status === 200){
                 setGroupSuccess(true);
