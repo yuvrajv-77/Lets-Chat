@@ -70,7 +70,7 @@ function Login() {
         if (isFormValid) {
 			try {
 				await new Promise(resolve => setTimeout(resolve, 1000));
-				const response = await axios.post('http://localhost:6001/api/login', { email, password });
+				const response = await axios.post('https://lets-chat-mern.onrender.com/api/login', { email, password });
 				console.log(response.data);
 
 				// Handle the response here

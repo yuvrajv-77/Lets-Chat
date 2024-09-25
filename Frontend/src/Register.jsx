@@ -96,7 +96,7 @@ function Register() {
             try {
                
                 // await new Promise(resolve => setTimeout(resolve, 1000));
-                const response = await axios.post('http://localhost:6001/api/register', { name, email, password, username });
+                const response = await axios.post('https://lets-chat-mern.onrender.com/api/register', { name, email, password, username });
                 console.log(response.data, response.status);
                 // Handle the response here
                 setAuthUser(response.data);
