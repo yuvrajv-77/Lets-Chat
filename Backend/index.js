@@ -35,7 +35,7 @@ app.use('/api/messages',MessageRoutes);
 
 
 // Start server
-server.listen(process.env.PORT, () => {
+server.listen(process.env.PORT || 6001, () => {
     console.log("🗃️  Server is started and running");
 });
 
