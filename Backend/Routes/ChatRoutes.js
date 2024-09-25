@@ -1,6 +1,6 @@
 const express = require('express');
 const {accessChatController,accessGroupController,fetchGroupController, fetchChatController, createGroupController, remaneGroupController, addGroupController, removeGroupController} = require('../Controllers/ChatController');
-const { protect } = require('../middleware/Protect');
+const { protect } = require('../Middleware/Protect');
 const Router = express.Router();
 
 // api/chat/
