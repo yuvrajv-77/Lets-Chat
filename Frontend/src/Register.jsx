@@ -186,7 +186,7 @@ function Register() {
                                           )}
                                         </button>
                                       }
-                                      type={isVisible ? "text" : "password"} />/>
+                                      type={isVisible ? "text" : "password"} />
                                      <p className="text-sm text-center h-2 text-red-500">{passwordError}</p>
                             </div>
                             
