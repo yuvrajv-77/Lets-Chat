@@ -168,6 +168,7 @@ function Register() {
                                 <p className='mb-2'>Password</p>
                                 <Input placeholder='Create Password'
                                     size='lg'
+					type='password'
                                     value={password}
                                     onChange={(e) => handlePasswordChange(e)}
                                     variant='bordered' />
