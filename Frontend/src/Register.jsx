@@ -1,6 +1,8 @@
 import { Button, Checkbox, Divider, Image, Input } from '@nextui-org/react';
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
+import {EyeFilledIcon} from "./assets/EyeFilledIcon";
+import {EyeSlashFilledIcon} from "./assets/EyeSlashFilledIcon";
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 
@@ -20,6 +22,9 @@ function Register() {
     const [showErrorAlert, setshowErrorAlert] = useState(false);
 
     const {authUser,setAuthUser} = useContext(AuthContext)
+
+  const [isVisible, setIsVisible] = useState(false);
+    const toggleVisibility = () => setIsVisible(!isVisible);
 
 
     const [isloading, setIsloading] = useState(false);
@@ -168,10 +173,20 @@ function Register() {
                                 <p className='mb-2'>Password</p>
                                 <Input placeholder='Create Password'
                                     size='lg'
-					type='password'
+				
                                     value={password}
                                     onChange={(e) => handlePasswordChange(e)}
-                                    variant='bordered' />
+                                    variant='bordered'
+					  endContent={
+                                        <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                                          {isVisible ? (
+                                            <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                          ) : (
+                                            <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                          )}
+                                        </button>
+                                      }
+                                      type={isVisible ? "text" : "password"} />/>
                                      <p className="text-sm text-center h-2 text-red-500">{passwordError}</p>
                             </div>
                             
